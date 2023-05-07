@@ -6,6 +6,7 @@ const Title = styled.div`
   padding: 10px;
   font-size: large;
   font-weight: bold;
+  text-align: center;
 `
 
 const Root = styled.div`
