@@ -1,25 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import styled from '@emotion/styled'
-import { Circle } from './components/StyledSquare'
-import Field from './components/registration/Field'
-import Login from './components/login/Login'
+import {
+  Link,
+  Outlet,
+  ReactLocation,
+  Router,
+  useMatch,
+} from '@tanstack/react-location'
 
-const StyledComponent = styled.div`
-  font-size: large;
-  font-style: italic;
-  font-weight: 600;
-  color: ${(props) => props.color};
-`
+import { useQuery, QueryClient, QueryClientProvider } from 'react-query'
+import Home from './pages/Home'
+import RegistrationPage from './pages/RegistrationPage'
+import LoginPage from './pages/LoginPage'
 
+const queryClient = new QueryClient()
+
+const location = new ReactLocation()
+
+const routes = [
+  {
+    path: '/',
+    element: <Home />,
+  },
+  {
+    path: '/signup',
+    element: <RegistrationPage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+]
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <Login />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Router routes={routes} location={location}>
+        <Outlet />
+      </Router>
+    </QueryClientProvider>
   )
 }
 

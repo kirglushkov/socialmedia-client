@@ -15,9 +15,14 @@ import React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import axios from 'axios'
+import { useAppDispatch } from '../../store/hooks'
+import { login } from '../../store/LoggedSlice'
+import { useNavigate } from '@tanstack/react-location'
 interface IFormInput {
   firstName: string
   lastName: string
+  email: string
   sex: 'Мужчина' | 'Женщина'
   password: string | number
 }
@@ -39,36 +44,45 @@ const ErrorText = styled(FormHelperText)`
 
 const StyledForm = styled(Box)`
   background-color: #f6f6f6;
-  border-radius: 20px;
-  box-sizing: border-box;
-  height: 500px;
-  padding: 20px;
-  width: 320px;
+  border-radius: 10px;
+
   display: flex;
   flex-direction: column;
   color: #ff0000;
   font-size: 12px;
+  align-items: stretch;
 `
-const Title = styled.div``
-const SubTitle = styled.div``
 
-export default function Field() {
+export default function Register() {
   const [showPassword, setShowPassword] = React.useState(false)
-
+  const dispatch = useAppDispatch()
   const handleClickShowPassword = () => setShowPassword((show) => !show)
-
+  const navigate = useNavigate()
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault()
   }
-
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>()
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:3001/auth/register',
+        data
+      )
+      console.log(response.data)
+      dispatch(login())
+      if (response) {
+        navigate({ to: '/login', replace: true })
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const formProps = {
     noValidate: true,
     autoComplete: 'off',
@@ -104,6 +118,17 @@ export default function Field() {
           <ErrorText id="component-error-text">Это поле обязательно</ErrorText>
         )}
       </FormControl>
+      <FormControl variant="standard">
+        <InputLabel htmlFor="component-helper">Почта</InputLabel>
+        <Input
+          id="component-helper"
+          aria-describedby="component-helper-text"
+          {...register('email', { required: true })}
+        />
+        {errors.email && (
+          <ErrorText id="component-error-text">Это поле обязательно</ErrorText>
+        )}
+      </FormControl>
       <TextField
         id="outlined-select-currency"
         select
@@ -119,7 +144,7 @@ export default function Field() {
         ))}
       </TextField>
       <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
         <OutlinedInput
           id="outlined-adornment-password"
           type={showPassword ? 'text' : 'password'}
@@ -135,7 +160,7 @@ export default function Field() {
               </IconButton>
             </InputAdornment>
           }
-          label="Password"
+          label="Пароль"
           error={errors.password ? true : false}
           {...register('password', { required: true })}
         />
