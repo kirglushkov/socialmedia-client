@@ -19,6 +19,7 @@ import axios from 'axios'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { login } from '../../store/LoggedSlice'
 import { useNavigate } from '@tanstack/react-location'
+import { setUser } from '../../store/userSlice'
 interface IFormInput {
   email: string
   password: string | number
@@ -79,6 +80,9 @@ export default function Login() {
         data
       )
       console.log(response.data)
+      dispatch(
+        setUser({ user: response.data.user, token: response.data.token })
+      )
       dispatch(login())
       if (response) {
         navigate({ to: '/', replace: true })

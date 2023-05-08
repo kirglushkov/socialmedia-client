@@ -5,12 +5,18 @@ import styled from '@emotion/styled'
 import NavBar from '../components/NavBar'
 import Divider from '@mui/material/Divider'
 import People from '../assets/people'
+import AvatarElement from '../components/AvatarElement'
+import FireUpload from '../components/fireUpload'
 type Props = {}
+
+import { useState, useEffect } from 'react'
+import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 
 const StyledLink = styled(Link)`
   display: flex;
   flex: 0 0 auto;
-  width: 200px;
+  width: 100%;
+  max-width: 260px;
   padding: 5px 20px;
   background-color: #97daff;
   border-radius: 50px;
@@ -26,15 +32,16 @@ const StyledLink = styled(Link)`
   &:active {
     background-color: #4bd1fa;
   }
-  font-size: 0.6rem;
 
   h2 {
     margin: 0;
     padding: 0;
+    font-size: clamp(0.6rem, 1.4rem, 1.8rem);
   }
 `
 const OffSet = styled.div`
-  height: 64px;
+  height: 84px;
+  width: 100%;
 `
 const Content = styled.div`
   display: flex;
@@ -42,30 +49,38 @@ const Content = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
+  width: 100%;
 `
 
 const Greeting = styled.div`
-  font-size: 2rem;
+  font-size: clamp(2rem, 2.5rem, 3rem);
   font-weight: bold;
-  padding: 10px;
 `
 const SubGreeting = styled.div`
   display: flex;
   justify-content: center;
   > span {
-    font-size: 0.7rem;
+    font-size: clamp(0.5rem, 0.9rem, 1.3rem);
     color: grey;
-    max-width: 200px;
+    max-width: 300px;
   }
 `
 
 const PictureContainer = styled.div`
-  max-width: 200px;
+  max-width: 300px;
   width: 100%;
 `
 
 const TextContainer = styled.div`
   text-align: center;
+`
+
+const Root = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `
 
 const SomePicture = () => {
@@ -79,9 +94,10 @@ const SomePicture = () => {
 const Home = (props: Props) => {
   const navigate = useNavigate()
   const { login } = useAppSelector((state) => state)
-  //   console.log(login.value)
+  const { user } = useAppSelector((state) => state)
+
   return (
-    <div>
+    <Root>
       <NavBar />
       <OffSet />
       {!login.value && (
@@ -97,16 +113,15 @@ const Home = (props: Props) => {
           </TextContainer>
 
           <SomePicture />
-
-          <StyledLink to={'/signup'}>
-            <h2>Зарегистроваться</h2>
-          </StyledLink>
           <StyledLink to={'/login'}>
             <h2>Войти</h2>
           </StyledLink>
+          <StyledLink to={'/signup'}>
+            <h2>Зарегистроваться</h2>
+          </StyledLink>
         </Content>
       )}
-    </div>
+    </Root>
   )
 }
 

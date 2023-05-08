@@ -12,6 +12,9 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import styled from '@emotion/styled'
+import { useAppSelector } from '../store/hooks'
+import AvatarElement from './AvatarElement'
+import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 
 const StyledAppBar = styled(AppBar)`
   background-color: #53a2e7;
@@ -34,10 +37,25 @@ const pages = ['Друзья', 'Мои посты']
 const settings = ['Профиль', 'Выйти']
 
 function NavBar() {
+  const { login } = useAppSelector((state) => state)
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   )
+
+  const { user } = useAppSelector((state) => state)
+  const [image, setImage] = React.useState<string>('')
+
+  React.useEffect(() => {
+    if (user.user != null) {
+      const picPath = user.user.picturePath
+      const storage = getStorage()
+      const reference = ref(storage, `images/${picPath}`)
+      getDownloadURL(reference).then((url) => {
+        setImage(url)
+      })
+    }
+  }, [])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -128,36 +146,37 @@ function NavBar() {
               </Button>
             ))}
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Настройки">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {login.value && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Настройки">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <AvatarElement img={image} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </StyledAppBar>
