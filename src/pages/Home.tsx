@@ -11,6 +11,9 @@ type Props = {}
 
 import { useState, useEffect } from 'react'
 import { getDownloadURL, getStorage, ref } from 'firebase/storage'
+import ProfilePage from './ProfilePage'
+import PostPage from './PostPage'
+import FriendsList from './FriendsList'
 
 const StyledLink = styled(Link)`
   display: flex;
@@ -49,7 +52,7 @@ const Content = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
-  width: 100%;
+  width: calc(100%);
 `
 
 const Greeting = styled.div`
@@ -100,6 +103,14 @@ const Home = (props: Props) => {
     <Root>
       <NavBar />
       <OffSet />
+      {user.user != null && (
+        <>
+          <ProfilePage />
+          <PostPage />
+          <FriendsList />
+        </>
+      )}
+
       {!login.value && (
         <Content>
           <TextContainer>

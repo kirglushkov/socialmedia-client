@@ -18,8 +18,11 @@ export const LoginSlice = createSlice({
     login: (state) => {
       state.value = true
     },
+    logout: (state) => {
+      state.value = false
+    }
   },
 })
 
-export const { login } = LoginSlice.actions
+export const { login, logout } = LoginSlice.actions
 export default LoginSlice.reducer

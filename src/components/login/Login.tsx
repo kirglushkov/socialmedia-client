@@ -79,7 +79,6 @@ export default function Login() {
         'http://localhost:3001/auth/login',
         data
       )
-      console.log(response.data)
       dispatch(
         setUser({ user: response.data.user, token: response.data.token })
       )

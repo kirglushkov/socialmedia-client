@@ -12,9 +12,12 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import styled from '@emotion/styled'
-import { useAppSelector } from '../store/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 import AvatarElement from './AvatarElement'
 import { getDownloadURL, getStorage, ref } from 'firebase/storage'
+import { logout } from '../store/LoggedSlice'
+import { setLogOut } from '../store/userSlice'
+import { useNavigate } from '@tanstack/react-location'
 
 const StyledAppBar = styled(AppBar)`
   background-color: #53a2e7;
@@ -42,7 +45,8 @@ function NavBar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   )
-
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { user } = useAppSelector((state) => state)
   const [image, setImage] = React.useState<string>('')
 
@@ -70,6 +74,15 @@ function NavBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+
+  const HandleLogOut = () => {
+    dispatch(logout())
+    dispatch(setLogOut())
+  }
+
+  const HandleProfile = () => {
+    navigate({ to: '/profile', replace: false })
   }
 
   return (
@@ -170,7 +183,16 @@ function NavBar() {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem
+                    key={setting}
+                    onClick={() => {
+                      setting === 'Выйти'
+                        ? HandleLogOut()
+                        : setting === 'Профиль'
+                        ? HandleProfile()
+                        : handleCloseUserMenu
+                    }}
+                  >
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}

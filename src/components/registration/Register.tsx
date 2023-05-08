@@ -32,8 +32,12 @@ interface IFormInput {
   lastName: string
   email: string
   sex: 'Мужчина' | 'Женщина'
+  location: string
+  age: number
+  university: string
   password: string | number
   picturePath: string
+  occupation: string
 }
 
 const Genders = [
@@ -92,6 +96,7 @@ export default function Register() {
     handleSubmit,
   } = useForm<IFormInput>()
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    console.log(data)
     data['picturePath'] = imageUpload.name // using bracket notation
     uploadFile()
     try {
@@ -142,6 +147,17 @@ export default function Register() {
         )}
       </FormControl>
       <FormControl variant="standard">
+        <InputLabel htmlFor="component-helper">Занятость</InputLabel>
+        <Input
+          id="component-helper"
+          aria-describedby="component-helper-text"
+          {...register('occupation', { required: true })}
+        />
+        {errors.occupation && (
+          <ErrorText id="component-error-text">Это поле обязательно</ErrorText>
+        )}
+      </FormControl>
+      <FormControl variant="standard">
         <InputLabel htmlFor="component-helper">Почта</InputLabel>
         <Input
           id="component-helper"
@@ -152,18 +168,48 @@ export default function Register() {
           <ErrorText id="component-error-text">Это поле обязательно</ErrorText>
         )}
       </FormControl>
+      <FormControl variant="standard">
+        <InputLabel htmlFor="component-helper">Возраст</InputLabel>
+        <Input
+          id="component-helper"
+          aria-describedby="component-helper-text"
+          {...register('age', { required: true })}
+        />
+        {errors.age && (
+          <ErrorText id="component-error-text">Это поле обязательно</ErrorText>
+        )}
+      </FormControl>
+      <FormControl variant="standard">
+        <InputLabel htmlFor="component-helper">Город</InputLabel>
+        <Input
+          id="component-helper"
+          aria-describedby="component-helper-text"
+          {...register('location', { required: true })}
+        />
+        {errors.location && (
+          <ErrorText id="component-error-text">Это поле обязательно</ErrorText>
+        )}
+      </FormControl>
+      <FormControl variant="standard">
+        <InputLabel htmlFor="component-helper">Университет</InputLabel>
+        <Input
+          id="component-helper"
+          aria-describedby="component-helper-text"
+          {...register('university', { required: true })}
+        />
+        {errors.university && (
+          <ErrorText id="component-error-text">Это поле обязательно</ErrorText>
+        )}
+      </FormControl>
 
       <FormControl variant="standard">
-        <InputLabel htmlFor="component-helper">Почта</InputLabel>
+        <InputLabel htmlFor="component-helper">Аватар</InputLabel>
         <Input
           type="file"
           onChange={(event) => {
             setImageUpload(event.target.files[0])
           }}
         />
-        {errors.email && (
-          <ErrorText id="component-error-text">Это поле обязательно</ErrorText>
-        )}
       </FormControl>
       <TextField
         id="outlined-select-currency"
