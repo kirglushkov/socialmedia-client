@@ -5,6 +5,10 @@ import AvatarElement from '../AvatarElement'
 import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { Link, useNavigate } from '@tanstack/react-location'
+import { setFriends, setPost } from '../../store/userSlice'
+import { FavoriteBorderOutlined, FavoriteOutlined } from '@mui/icons-material'
 
 interface CardProps {
   key: string | number
@@ -66,7 +70,6 @@ const Likes = styled.div`
 `
 
 const Root = styled.div`
-  max-width: 500px;
   height: 100%;
   background-color: white;
   border-radius: 10px;
@@ -80,6 +83,44 @@ const Card = (props: CardProps) => {
   const storage = getStorage()
   const UserReference = ref(storage, `images/${props.userPicturePath}`)
   const PostReference = ref(storage, `posts/${props.picturePath}`)
+  const { user } = useAppSelector((state) => state)
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  let isLiked = false
+  if (user.user._id in props.likes) {
+    isLiked = true
+  }
+
+  const patchFriend = async () => {
+    const response = await fetch(
+      `http://localhost:3001/users/${user.user._id}/${props.postUserId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    const data = await response.json()
+    dispatch(setFriends({ friends: data }))
+  }
+
+  const patchLike = async () => {
+    const response = await fetch(
+      `http://localhost:3001/posts/${props.postId}/like`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user.user._id }),
+      }
+    )
+    const updatedPost = await response.json()
+    dispatch(setPost({ post: updatedPost }))
+  }
 
   React.useEffect(() => {
     getDownloadURL(UserReference).then((url) => {
@@ -93,17 +134,20 @@ const Card = (props: CardProps) => {
     <Root>
       <Profile>
         <UserContainer>
-          <ButtonBase>
+          <ButtonBase
+            onClick={() => {
+              navigate({ to: `/users/${props.postUserId}` })
+            }}
+          >
             <AvatarElement img={UserImage} />
           </ButtonBase>
-
           <NameContainer>
             <Name>{props.name}</Name>
             <City>{props.location}</City>
           </NameContainer>
         </UserContainer>
 
-        <AddToFriend>
+        <AddToFriend onClick={patchFriend}>
           <GroupAddIcon />
         </AddToFriend>
       </Profile>
@@ -114,9 +158,13 @@ const Card = (props: CardProps) => {
       </ImageContainer>
       <Divider />
       <Likes>
-        <span>{props.likes}</span>
-        <ButtonBase>
-          <ThumbUpAltIcon />
+        <span>{Object.keys(props.likes).length}</span>
+        <ButtonBase onClick={patchLike}>
+          {isLiked ? (
+            <FavoriteOutlined sx={{ color: 'red' }} />
+          ) : (
+            <FavoriteBorderOutlined />
+          )}
         </ButtonBase>
       </Likes>
     </Root>

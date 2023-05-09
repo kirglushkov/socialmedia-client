@@ -5,11 +5,37 @@ import Card from './Card'
 import { setPosts } from '../../store/userSlice'
 import { useAppSelector } from '../../store/hooks'
 import styled from '@emotion/styled'
+import { keyframes } from '@emotion/react'
 
 const Grid = styled.div`
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   gap: 20px;
+`
+const gradientAnimation = keyframes`
+  0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+`
+
+const LoadingRoot = styled.div`
+  animation: ${gradientAnimation} 1s linear infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 600% 600%;
+  color: #fff;
+  padding: 8px;
+  border-radius: 5px;
 `
 
 const AllPosts = ({ userId, isProfile = false }) => {
@@ -43,7 +69,6 @@ const AllPosts = ({ userId, isProfile = false }) => {
     } else {
       getPosts()
     }
-    console.log(user.posts)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -59,7 +84,6 @@ const AllPosts = ({ userId, isProfile = false }) => {
           picturePath,
           userPicturePath,
           likes,
-          comments,
         }) => (
           <Card
             key={_id}
@@ -70,7 +94,7 @@ const AllPosts = ({ userId, isProfile = false }) => {
             location={location}
             picturePath={picturePath}
             userPicturePath={userPicturePath}
-            likes={Object.keys(likes).length}
+            likes={likes}
           />
         )
       )}

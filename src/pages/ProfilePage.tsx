@@ -35,8 +35,7 @@ type Props = {}
 
 const ProfilePage = (props: Props) => {
   const { user } = useAppSelector((state) => state)
-  console.log(user.user)
-  const { firstName, lastName, email, sex, university, occupation, age } =
+  const { _id, firstName, lastName, email, sex, university, occupation, age } =
     user.user
   const [image, setImage] = React.useState<string>('')
   const navigate = useNavigate()
@@ -102,7 +101,7 @@ const ProfilePage = (props: Props) => {
       <Main>
         <Button
           onClick={() => {
-            navigate({ to: '/profile', replace: false })
+            navigate({ to: `/users/${_id}`, replace: false })
           }}
         >
           Посмотреть профиль

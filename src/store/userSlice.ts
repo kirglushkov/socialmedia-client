@@ -47,11 +47,9 @@ export const UserSlice = createSlice({
       state.token = null
     },
     setFriends: (state, action) => {
-      if (state.user) {
+
         state.user.friends = action.payload.friends
-      } else {
-        console.error('user friends non-exist')
-      }
+
     },
     setPosts: (state, action) => {
       state.posts = action.payload.posts

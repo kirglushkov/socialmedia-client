@@ -94,6 +94,7 @@ const UploadPost = (props: Props) => {
       const posts = response.data
       dispatch(setPosts({ posts }))
       setImageUpload(null)
+      setIsImage(!isImage)
       setPost('')
     } catch (error) {
       console.error(error)
@@ -152,7 +153,7 @@ const UploadPost = (props: Props) => {
           borderRadius: '3rem',
         }}
       >
-        POST
+        ПОСТ
       </Button>
     </UploadRoot>
   )

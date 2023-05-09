@@ -1,23 +1,14 @@
 import { Link, useNavigate } from '@tanstack/react-location'
-import React from 'react'
 import { useAppSelector } from '../store/hooks'
 import styled from '@emotion/styled'
 import NavBar from '../components/NavBar'
-import Divider from '@mui/material/Divider'
 import People from '../assets/people'
-import AvatarElement from '../components/AvatarElement'
-import FireUpload from '../components/fireUpload'
-type Props = {}
-
-import { useState, useEffect } from 'react'
-import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 import ProfilePage from './ProfilePage'
-import PostPage from './PostPage'
 import FriendsList from './FriendsList'
 import AllPosts from '../components/post/AllPosts'
 import UploadPost from '../components/makePost/UploadPost'
-import { Box } from '@mui/material'
 
+type Props = {}
 const StyledLink = styled(Link)`
   display: flex;
   flex: 0 0 auto;
@@ -93,13 +84,14 @@ const Root = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-
+  grid-template-columns: 1fr 2fr 1fr;
+  max-width: 1400px;
   gap: 20px;
   padding: 20px;
-
+  justify-content: center;
+  margin: 0 auto;
   @media (max-width: 999px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     grid-template-rows: 1fr auto;
     grid-auto-flow: column; /* first column takes up remaining space */
   }
