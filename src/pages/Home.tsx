@@ -14,6 +14,9 @@ import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 import ProfilePage from './ProfilePage'
 import PostPage from './PostPage'
 import FriendsList from './FriendsList'
+import AllPosts from '../components/post/AllPosts'
+import UploadPost from '../components/makePost/UploadPost'
+import { Box } from '@mui/material'
 
 const StyledLink = styled(Link)`
   display: flex;
@@ -46,13 +49,14 @@ const OffSet = styled.div`
   height: 84px;
   width: 100%;
 `
-const Content = styled.div`
+const Content = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
-  width: calc(100%);
+  width: 100%;
+  height: 100%;
 `
 
 const Greeting = styled.div`
@@ -84,6 +88,41 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: #e6e6e6;
+`
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+  padding: 20px;
+
+  @media (max-width: 999px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-auto-flow: column; /* first column takes up remaining space */
+  }
+
+  @media (max-width: 700px) {
+    display: flex;
+    flex-direction: column;
+    div:last-child {
+      order: 1;
+    }
+    div:nth-child(2) {
+      order: 2;
+    }
+  }
+`
+
+const FixedBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  height: min-content;
+  width: 100%;
+  gap: 20px;
 `
 
 const SomePicture = () => {
@@ -104,11 +143,16 @@ const Home = (props: Props) => {
       <NavBar />
       <OffSet />
       {user.user != null && (
-        <>
-          <ProfilePage />
-          <PostPage />
-          <FriendsList />
-        </>
+        <Grid>
+          <FixedBox>
+            <ProfilePage />
+            <FriendsList />
+          </FixedBox>
+          <AllPosts userId={user.user._id} />
+          <FixedBox>
+            <UploadPost />
+          </FixedBox>
+        </Grid>
       )}
 
       {!login.value && (
@@ -118,7 +162,8 @@ const Home = (props: Props) => {
             <SubGreeting>
               <span>
                 Здесь вы можете найти свою работу, друзей, себя и вторую
-                половинку
+                половинку. <br />
+                Войдите или зарегистрируйтесь, чтобы увидеть сайт
               </span>
             </SubGreeting>
           </TextContainer>

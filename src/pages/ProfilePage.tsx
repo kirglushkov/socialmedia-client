@@ -16,7 +16,7 @@ const Main = styled.div`
 
 const Card = styled.div`
   background-color: #ffffff;
-  max-width: 300px;
+
   border-radius: 20px;
   padding: 20px;
 `

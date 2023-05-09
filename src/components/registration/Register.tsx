@@ -73,15 +73,14 @@ export default function Register() {
   const navigate = useNavigate()
 
   const [imageUpload, setImageUpload] = React.useState(null)
-  const [imageUrls, setImageUrls] = React.useState([])
+  const [imageUrls, setImageUrls] = React.useState('')
 
-  const imagesListRef = ref(storage, 'images/')
   const uploadFile = () => {
     if (imageUpload == null) return
     const imageRef = ref(storage, `images/${imageUpload.name}`)
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
-        setImageUrls((prev) => [...prev, url])
+        setImageUrls(url)
       })
     })
   }
@@ -211,6 +210,7 @@ export default function Register() {
           }}
         />
       </FormControl>
+      <img src={imageUrls} />
       <TextField
         id="outlined-select-currency"
         select
