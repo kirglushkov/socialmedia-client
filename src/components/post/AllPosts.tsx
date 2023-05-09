@@ -70,10 +70,10 @@ const AllPosts = ({ userId, isProfile = false }) => {
       getPosts()
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
+  const AllPostsItems = [...user.posts].reverse()
   return (
     <Grid>
-      {user.posts.map(
+      {AllPostsItems.map(
         ({
           _id,
           userId,

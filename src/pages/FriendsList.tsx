@@ -2,7 +2,9 @@ import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { setFriends } from '../store/userSlice'
-import { Box } from '@mui/material'
+import { Box, Divider } from '@mui/material'
+import { getDownloadURL, getStorage, ref } from 'firebase/storage'
+import Friend from '../components/Friend'
 
 type Props = {}
 
@@ -15,6 +17,12 @@ const Root = styled.div`
 const Title = styled.div`
   font-size: larger;
   font-weight: 600;
+`
+
+const StyledFriendContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 `
 
 const FriendsList = (props: Props) => {
@@ -39,19 +47,16 @@ const FriendsList = (props: Props) => {
   useEffect(() => {
     getFriends()
   }, [])
+
   return (
     <Root>
       <Title>Друзья</Title>
-      <Box display="flex" flexDirection="column" gap="1.5rem">
+      <Box display="flex" flexDirection="column">
         {user.friends.map((user, index) => (
-          <div key={index}>
-            <h3>
-              {user.firstName} {user.lastName}
-            </h3>
-            <p>Occupation: {user.occupation}</p>
-            <p>Location: {user.location}</p>
-            <img src={user.picturePath} alt="User" />
-          </div>
+          <StyledFriendContainer key={index}>
+            <Friend {...user} />
+            <Divider />
+          </StyledFriendContainer>
         ))}
       </Box>
     </Root>

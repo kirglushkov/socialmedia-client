@@ -92,18 +92,24 @@ const Card = (props: CardProps) => {
   }
 
   const patchFriend = async () => {
-    const response = await fetch(
-      `http://localhost:3001/users/${user.user._id}/${props.postUserId}`,
-      {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json',
-        },
+    try {
+      if (user.user._id !== props.postUserId) {
+        const response = await fetch(
+          `http://localhost:3001/users/${user.user._id}/${props.postUserId}`,
+          {
+            method: 'PATCH',
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        const data = await response.json()
+        dispatch(setFriends({ friends: data }))
       }
-    )
-    const data = await response.json()
-    dispatch(setFriends({ friends: data }))
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const patchLike = async () => {
@@ -146,10 +152,11 @@ const Card = (props: CardProps) => {
             <City>{props.location}</City>
           </NameContainer>
         </UserContainer>
-
-        <AddToFriend onClick={patchFriend}>
-          <GroupAddIcon />
-        </AddToFriend>
+        {user.user._id !== props.postUserId && (
+          <AddToFriend onClick={patchFriend}>
+            <GroupAddIcon />
+          </AddToFriend>
+        )}
       </Profile>
       <Divider />
       <Description>{props.description}</Description>
