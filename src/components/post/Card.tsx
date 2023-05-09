@@ -132,10 +132,15 @@ const Card = (props: CardProps) => {
     getDownloadURL(UserReference).then((url) => {
       setUserImage(url)
     })
-    getDownloadURL(PostReference).then((url) => {
-      setPostImage(url)
-    })
-  }, [PostReference])
+  }, [])
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      getDownloadURL(PostReference).then((url) => {
+        setPostImage(url)
+      })
+    }, 300)
+  }, [])
   return (
     <Root>
       <Profile>
