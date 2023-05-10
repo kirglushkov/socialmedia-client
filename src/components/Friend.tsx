@@ -51,7 +51,7 @@ const Friend = (props: Props) => {
     try {
       if (user.user._id !== props._id) {
         const response = await fetch(
-          `http://localhost:3001/users/${user.user._id}/${props._id}`,
+          `https://small-water-6072.fly.dev/users/${user.user._id}/${props._id}`,
           {
             method: 'PATCH',
             headers: {

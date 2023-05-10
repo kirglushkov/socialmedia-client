@@ -27,16 +27,6 @@ const UploadRoot = styled(Box)`
   padding: 20px;
   border-radius: 30px;
 `
-
-const StyledDropzone = styled(Box)`
-  border: 2px dashed black;
-  border-radius: 5px;
-  > p {
-    align-items: center;
-    text-align: center;
-  }
-`
-
 const Profile = styled.div`
   display: flex;
   flex-direction: row;
@@ -47,7 +37,7 @@ const Profile = styled.div`
 
 const UploadPost = (props: Props) => {
   const [isImage, setIsImage] = useState(false)
-  const [imageUpload, setImageUpload] = React.useState(null)
+  const [imageUpload, setImageUpload] = React.useState<File | null>(null)
   const [UserImage, setUserImage] = useState('')
   const [post, setPost] = useState('')
   const { user } = useAppSelector((state) => state)
@@ -80,14 +70,14 @@ const UploadPost = (props: Props) => {
     const Data = {
       userId: id,
       description: post,
-      picturePath: imageUpload.name,
+      picturePath: imageUpload?.name,
     }
     const config = {
       headers: { Authorization: 'Bearer ' + user.token },
     }
     try {
       const response = await axios.post(
-        'http://localhost:3001/posts',
+        'https://small-water-6072.fly.dev/posts',
         Data,
         config
       )
@@ -124,7 +114,14 @@ const UploadPost = (props: Props) => {
               <InputBase
                 type="file"
                 onChange={(event) => {
-                  setImageUpload(event.target.files[0])
+                  const inputElement = event.target as HTMLInputElement
+                  if (
+                    inputElement &&
+                    inputElement.files &&
+                    inputElement.files[0]
+                  ) {
+                    setImageUpload(inputElement.files[0])
+                  }
                 }}
               />
             </div>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import Card from './Card'
 import { setPosts } from '../../store/userSlice'
@@ -38,11 +38,11 @@ const LoadingRoot = styled.div`
   border-radius: 5px;
 `
 
-const AllPosts = ({ userId, isProfile = false }) => {
+const AllPosts = () => {
   const dispatch = useDispatch()
   const { user } = useAppSelector((state) => state)
   const getPosts = async () => {
-    const response = await fetch(`http://localhost:3001/posts`, {
+    const response = await fetch(`https://small-water-6072.fly.dev/posts`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${user.token}` },
     })

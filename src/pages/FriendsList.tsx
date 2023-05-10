@@ -35,7 +35,7 @@ const FriendsList = (props: Props) => {
 
   const getFriends = async () => {
     const response = await fetch(
-      `http://localhost:3001/users/${user._id}/friends`,
+      `https://small-water-6072.fly.dev/users/${user._id}/friends`,
       {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },

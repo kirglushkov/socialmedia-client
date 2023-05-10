@@ -36,7 +36,7 @@ const People = (props: Props) => {
   const { user } = useAppSelector((state) => state.user)
   const [People, SetPeople] = useState([])
   const getFriends = async () => {
-    const response = await fetch(`http://localhost:3001/users/all`, {
+    const response = await fetch(`https://small-water-6072.fly.dev/users/all`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` },
     })

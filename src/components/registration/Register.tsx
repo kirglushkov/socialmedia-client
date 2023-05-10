@@ -100,7 +100,7 @@ export default function Register() {
     uploadFile()
     try {
       const response = await axios.post(
-        'http://localhost:3001/auth/register',
+        'https://small-water-6072.fly.dev/auth/register',
         data
       )
       dispatch(login())

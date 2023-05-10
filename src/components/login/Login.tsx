@@ -76,7 +76,7 @@ export default function Login() {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       const response = await axios.post(
-        'http://localhost:3001/auth/login',
+        'https://small-water-6072.fly.dev/auth/login',
         data
       )
       dispatch(
