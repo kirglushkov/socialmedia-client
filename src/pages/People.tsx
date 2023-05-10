@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { Box, Divider } from '@mui/material'
 import Friend from '../components/Friend'
 import UserAdd from '../components/UserAdd'
+import { FriendProps } from './FriendsList'
 
 type Props = {}
 
@@ -53,14 +54,14 @@ const People = (props: Props) => {
       <Title>Все друзья</Title>
       <Box display="flex" flexDirection="column">
         {user.friends.length === 0 && <Empty>пусто(</Empty>}
-        {user.friends?.map((user, index) => (
+        {user.friends?.map((user: FriendProps, index: number) => (
           <StyledFriendContainer key={index}>
             <Friend {...user} />
           </StyledFriendContainer>
         ))}
         <Divider />
         <Title>Все люди</Title>
-        {People?.map((user, index) => (
+        {People?.map((user: FriendProps, index: number) => (
           <StyledFriendContainer key={index}>
             <UserAdd {...user} />
           </StyledFriendContainer>

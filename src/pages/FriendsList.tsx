@@ -6,7 +6,14 @@ import { Box, Divider } from '@mui/material'
 import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 import Friend from '../components/Friend'
 
-type Props = {}
+export type FriendProps = {
+  firstName: string
+  lastName: string
+  location: string
+  occupation: string
+  picturePath: string
+  _id: string
+}
 
 const Root = styled.div`
   background-color: #ffffff;
@@ -27,7 +34,7 @@ const StyledFriendContainer = styled.div`
   padding: 10px;
 `
 
-const FriendsList = (props: Props) => {
+const FriendsList = () => {
   const { token } = useAppSelector((state) => state.user)
   const { user } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
@@ -54,7 +61,7 @@ const FriendsList = (props: Props) => {
     <Root>
       <Title>Друзья</Title>
       <Box display="flex" flexDirection="column">
-        {user.friends?.map((user, index) => (
+        {user.friends?.map((user: FriendProps, index: number) => (
           <StyledFriendContainer key={index}>
             <Friend {...user} />
           </StyledFriendContainer>

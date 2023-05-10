@@ -140,7 +140,7 @@ const Home = (props: Props) => {
             <ProfilePage />
             <FriendsList />
           </FixedBox>
-          <AllPosts userId={user.user._id} />
+          <AllPosts />
           <FixedBox>
             <UploadPost />
           </FixedBox>

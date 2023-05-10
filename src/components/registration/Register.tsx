@@ -72,7 +72,7 @@ export default function Register() {
   const handleClickShowPassword = () => setShowPassword((show) => !show)
   const navigate = useNavigate()
 
-  const [imageUpload, setImageUpload] = React.useState(null)
+  const [imageUpload, setImageUpload] = React.useState<File | null>(null)
   const [imageUrls, setImageUrls] = React.useState('')
 
   const uploadFile = () => {
@@ -96,19 +96,21 @@ export default function Register() {
   } = useForm<IFormInput>()
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data)
-    data['picturePath'] = imageUpload.name // using bracket notation
-    uploadFile()
-    try {
-      const response = await axios.post(
-        'https://small-water-6072.fly.dev/auth/register',
-        data
-      )
-      dispatch(login())
-      if (response) {
-        navigate({ to: '/login', replace: true })
+    if (imageUpload !== null) {
+      data['picturePath'] = imageUpload.name // using bracket notation
+      uploadFile()
+      try {
+        const response = await axios.post(
+          'https://small-water-6072.fly.dev/auth/register',
+          data
+        )
+        dispatch(login())
+        if (response) {
+          navigate({ to: '/login', replace: true })
+        }
+      } catch (error) {
+        console.error(error)
       }
-    } catch (error) {
-      console.error(error)
     }
   }
   const formProps = {
@@ -206,7 +208,15 @@ export default function Register() {
         <Input
           type="file"
           onChange={(event) => {
-            setImageUpload(event.target.files[0])
+            const inputElement = event.target as HTMLInputElement
+            if (
+              inputElement &&
+              inputElement.files &&
+              inputElement.files.length > 0 &&
+              inputElement.files[0]
+            ) {
+              setImageUpload(inputElement.files[0])
+            }
           }}
         />
       </FormControl>
