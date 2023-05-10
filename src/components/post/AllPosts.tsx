@@ -41,43 +41,18 @@ const LoadingRoot = styled.div`
 const AllPosts = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch()
   const { user } = useAppSelector((state) => state)
-  const [limit, setLimit] = useState(2)
-
   const getPosts = async () => {
-    const response = await fetch(
-      `http://localhost:3001/posts?start=0&limit=${limit}`,
-      {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${user.token}` },
-      }
-    )
+    const response = await fetch(`http://localhost:3001/posts`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${user.token}` },
+    })
     const data = await response.json()
-    const hasNewPosts = data.some(
-      (newPost) => !user.posts.some((post) => post._id === newPost._id)
-    )
-
-    if (hasNewPosts) {
-      dispatch(setPosts({ posts: data }))
-    }
+    dispatch(setPosts({ posts: data }))
   }
 
   useEffect(() => {
     getPosts()
-  }, [limit])
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const handleScroll = async () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
-    ) {
-      setLimit((prev) => prev + 3)
-    }
-  }
 
   const AllPostsItems = [...user.posts].reverse()
 
