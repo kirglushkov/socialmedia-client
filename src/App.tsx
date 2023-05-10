@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage'
 import FullProfilePage from './components/profile/FullProfilePage'
 import axios from 'axios'
 import ProfilePage from './pages/ProfilePage'
+import People from './pages/People'
 
 const queryClient = new QueryClient()
 
@@ -38,6 +39,10 @@ const routes = [
   {
     path: '/users/:id',
     element: <FullProfilePage />,
+  },
+  {
+    path: '/users',
+    element: <People />,
   },
 ]
 function App() {

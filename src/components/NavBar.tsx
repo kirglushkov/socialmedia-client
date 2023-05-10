@@ -80,6 +80,10 @@ function NavBar() {
     navigate({ to: '/profile', replace: false })
   }
 
+  const HandlePeople = () => {
+    navigate({ to: '/users', replace: false })
+  }
+
   return (
     <StyledAppBar position="fixed">
       <Container maxWidth="xl">
@@ -106,7 +110,11 @@ function NavBar() {
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
-            ></Menu>
+            >
+              <MenuItem onClick={HandlePeople}>
+                <Typography textAlign="center">Люди</Typography>
+              </MenuItem>
+            </Menu>
           </Box>
 
           <Typography
@@ -127,6 +135,14 @@ function NavBar() {
           >
             СоцСеть
           </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Button
+              onClick={login.value ? HandlePeople : handleCloseUserMenu}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Люди
+            </Button>
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
           {login.value && (
             <Box sx={{ flexGrow: 0 }}>

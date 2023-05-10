@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Card from './Card'
@@ -41,36 +41,46 @@ const LoadingRoot = styled.div`
 const AllPosts = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch()
   const { user } = useAppSelector((state) => state)
+  const [limit, setLimit] = useState(2)
 
   const getPosts = async () => {
-    const response = await fetch('http://localhost:3001/posts', {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${user.token}` },
-    })
-    const data = await response.json()
-    dispatch(setPosts({ posts: data }))
-  }
-
-  const getUserPosts = async () => {
     const response = await fetch(
-      `http://localhost:3001/posts/${userId}/posts`,
+      `http://localhost:3001/posts?start=0&limit=${limit}`,
       {
         method: 'GET',
         headers: { Authorization: `Bearer ${user.token}` },
       }
     )
     const data = await response.json()
-    dispatch(setPosts({ posts: data }))
+    const hasNewPosts = data.some(
+      (newPost) => !user.posts.some((post) => post._id === newPost._id)
+    )
+
+    if (hasNewPosts) {
+      dispatch(setPosts({ posts: data }))
+    }
   }
 
   useEffect(() => {
-    if (isProfile) {
-      getUserPosts()
-    } else {
-      getPosts()
+    getPosts()
+  }, [limit])
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const handleScroll = async () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.scrollHeight
+    ) {
+      setLimit((prev) => prev + 3)
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }
+
   const AllPostsItems = [...user.posts].reverse()
+
   return (
     <Grid>
       {AllPostsItems.map(

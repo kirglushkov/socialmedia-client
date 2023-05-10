@@ -4,7 +4,7 @@ import AvatarElement from './AvatarElement'
 import styled from '@emotion/styled'
 import { ButtonBase } from '@mui/material'
 import { useNavigate } from '@tanstack/react-location'
-import GroupRemoveIcon from '@mui/icons-material/GroupRemove'
+import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { setFriends } from '../store/userSlice'
 
@@ -32,7 +32,7 @@ const AddToFriend = styled(ButtonBase)`
   border-radius: 30px;
 `
 
-const Friend = (props: Props) => {
+const UserAdd = (props: Props) => {
   const [image, setImage] = React.useState<string>('')
   const { user } = useAppSelector((state) => state)
   const navigate = useNavigate()
@@ -84,7 +84,7 @@ const Friend = (props: Props) => {
           </h3>
 
           <AddToFriend onClick={patchFriend}>
-            <GroupRemoveIcon />
+            <GroupAddIcon />
           </AddToFriend>
         </Div>
       )}
@@ -92,4 +92,4 @@ const Friend = (props: Props) => {
   )
 }
 
-export default Friend
+export default UserAdd

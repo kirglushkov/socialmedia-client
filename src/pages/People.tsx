@@ -1,10 +1,9 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { setFriends } from '../store/userSlice'
 import { Box, Divider } from '@mui/material'
-import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 import Friend from '../components/Friend'
+import UserAdd from '../components/UserAdd'
 
 type Props = {}
 
@@ -12,11 +11,16 @@ const Root = styled.div`
   background-color: #ffffff;
   border-radius: 20px;
   padding: 20px;
+  width: 50%;
 `
 
 const Title = styled.div`
   font-size: larger;
   font-weight: 600;
+`
+
+const Empty = styled.div`
+  padding: 10px;
 `
 
 const StyledFriendContainer = styled.div`
@@ -27,23 +31,17 @@ const StyledFriendContainer = styled.div`
   padding: 10px;
 `
 
-const FriendsList = (props: Props) => {
+const People = (props: Props) => {
   const { token } = useAppSelector((state) => state.user)
   const { user } = useAppSelector((state) => state.user)
-  const dispatch = useAppDispatch()
-  const [Friends, SetFriends] = useState([])
-
+  const [People, SetPeople] = useState([])
   const getFriends = async () => {
-    const response = await fetch(
-      `http://localhost:3001/users/${user._id}/friends`,
-      {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
+    const response = await fetch(`http://localhost:3001/users/all`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+    })
     const data = await response.json()
-    dispatch(setFriends({ friends: data }))
-    SetFriends(data)
+    SetPeople(data)
   }
 
   useEffect(() => {
@@ -52,11 +50,19 @@ const FriendsList = (props: Props) => {
 
   return (
     <Root>
-      <Title>Друзья</Title>
+      <Title>Все друзья</Title>
       <Box display="flex" flexDirection="column">
+        {user.friends.length === 0 && <Empty>пусто(</Empty>}
         {user.friends?.map((user, index) => (
           <StyledFriendContainer key={index}>
             <Friend {...user} />
+          </StyledFriendContainer>
+        ))}
+        <Divider />
+        <Title>Все люди</Title>
+        {People?.map((user, index) => (
+          <StyledFriendContainer key={index}>
+            <UserAdd {...user} />
           </StyledFriendContainer>
         ))}
       </Box>
@@ -64,4 +70,4 @@ const FriendsList = (props: Props) => {
   )
 }
 
-export default FriendsList
+export default People
