@@ -105,7 +105,7 @@ const FullProfilePage = (props: Props) => {
     const onSubmit = async () => {
       try {
         const response = await axios.get(
-          `https://small-water-6072.fly.dev/users/${id}`,
+          `https://small-water-60723213213.fly.dev/users/${id}`,
           config
         )
         const data = response.data

@@ -77,7 +77,7 @@ const UploadPost = (props: Props) => {
     }
     try {
       const response = await axios.post(
-        'https://small-water-6072.fly.dev/posts',
+        'https://small-water-60723213213.fly.dev/posts',
         Data,
         config
       )

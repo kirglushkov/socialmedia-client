@@ -40,18 +40,22 @@ const Friend = (props: Props) => {
   const picPath = props.picturePath
   const storage = getStorage()
   const reference = ref(storage, `images/${picPath}`)
+  let isImage = true
 
-  React.useEffect(() => {
-    getDownloadURL(reference).then((url) => {
-      setImage(url)
-    })
-  }, [reference])
+  if (isImage) {
+    React.useEffect(() => {
+      getDownloadURL(reference).then((url) => {
+        setImage(url)
+      })
+      isImage = false
+    }, [reference])
+  }
 
   const patchFriend = async () => {
     try {
       if (user.user._id !== props._id) {
         const response = await fetch(
-          `https://small-water-6072.fly.dev/users/${user.user._id}/${props._id}`,
+          `https://small-water-60723213213.fly.dev/users/${user.user._id}/${props._id}`,
           {
             method: 'PATCH',
             headers: {

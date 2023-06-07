@@ -42,10 +42,13 @@ const AllPosts = () => {
   const dispatch = useDispatch()
   const { user } = useAppSelector((state) => state)
   const getPosts = async () => {
-    const response = await fetch(`https://small-water-6072.fly.dev/posts`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${user.token}` },
-    })
+    const response = await fetch(
+      `https://small-water-60723213213.fly.dev/posts`,
+      {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${user.token}` },
+      }
+    )
     const data = await response.json()
     dispatch(setPosts({ posts: data }))
   }

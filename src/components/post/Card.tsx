@@ -95,7 +95,7 @@ const Card = (props: CardProps) => {
     try {
       if (user.user._id !== props.postUserId) {
         const response = await fetch(
-          `https://small-water-6072.fly.dev/users/${user.user._id}/${props.postUserId}`,
+          `https://small-water-60723213213.fly.dev/users/${user.user._id}/${props.postUserId}`,
           {
             method: 'PATCH',
             headers: {
@@ -114,7 +114,7 @@ const Card = (props: CardProps) => {
 
   const patchLike = async () => {
     const response = await fetch(
-      `https://small-water-6072.fly.dev/posts/${props.postId}/like`,
+      `https://small-water-60723213213.fly.dev/posts/${props.postId}/like`,
       {
         method: 'PATCH',
         headers: {
