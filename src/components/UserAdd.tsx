@@ -51,7 +51,7 @@ const UserAdd = (props: Props) => {
     try {
       if (user.user._id !== props._id) {
         const response = await fetch(
-          `https://small-water-60723213213.fly.dev/users/${user.user._id}/${props._id}`,
+          `https://shy-moon-1692.fly.dev/users/${user.user._id}/${props._id}`,
           {
             method: 'PATCH',
             headers: {

@@ -37,13 +37,10 @@ const People = (props: Props) => {
   const { user } = useAppSelector((state) => state.user)
   const [People, SetPeople] = useState([])
   const getFriends = async () => {
-    const response = await fetch(
-      `https://small-water-60723213213.fly.dev/users/all`,
-      {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
+    const response = await fetch(`https://shy-moon-1692.fly.dev/users/all`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+    })
     const data = await response.json()
     SetPeople(data)
   }

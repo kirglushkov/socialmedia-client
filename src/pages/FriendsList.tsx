@@ -42,7 +42,7 @@ const FriendsList = () => {
 
   const getFriends = async () => {
     const response = await fetch(
-      `https://small-water-60723213213.fly.dev/users/${user._id}/friends`,
+      `https://shy-moon-1692.fly.dev/users/${user._id}/friends`,
       {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
